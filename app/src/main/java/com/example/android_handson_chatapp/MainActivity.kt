@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.android_handson_chatapp.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 
 private lateinit var binding: ActivityMainBinding
 
@@ -26,6 +27,20 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(tag, "Email is: ${email}")
             Log.d(tag, "password is: ${password}")
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener{
+                    if (it.isCanceled){
+                        Log.d(tag, "Canceled")
+                    }
+                    if (!it.isSuccessful) {
+                        Log.d(tag, "Failed to create user ${it.exception}")
+                        return@addOnCompleteListener
+                    }
+
+                    //else if successful
+                    Log.d(tag, "Successfully created user with uid: ${it.result.user?.uid}")
+                }
         }
 
         binding.haveAccountTextRegister.setOnClickListener {
