@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1047494148170",
+    "project_id": "kotlinhandsonsample",
+    "storage_bucket": "kotlinhandsonsample.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047494148170:android:40fd3cfaf3b9a31d9e66b3",
+        "android_client_info": {
+          "package_name": "com.example.android_handson_chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047494148170-9c4qcelage21rroin1mgode0ngqkgcth.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgr82blkt6e0vO7fElNYfVsz-Os127rEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047494148170-9c4qcelage21rroin1mgode0ngqkgcth.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
