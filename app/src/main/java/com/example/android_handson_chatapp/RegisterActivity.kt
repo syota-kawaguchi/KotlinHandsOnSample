@@ -1,17 +1,19 @@
 package com.example.android_handson_chatapp
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import com.example.android_handson_chatapp.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val tag = "MainActivity"
+    private val tag = "RegisterActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,29 @@ class MainActivity : AppCompatActivity() {
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.selectPhotoButtonRegister.setOnClickListener {
+            Log.d(tag, "Try to show photo selector")
+
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            Log.d(tag, "Photo was selected")
+
+            val uri = data.data
+
+            //APIレベルによってbitmapの取得方法の推奨が違う
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            binding.circleViewRegister.setImageBitmap(bitmap)
+            binding.selectPhotoButtonRegister.alpha = 0f
         }
     }
 
