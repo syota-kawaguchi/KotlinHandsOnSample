@@ -21,6 +21,8 @@
         android:id="@+id/circle_view_register"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/iOS_blue"
         app:layout_constraintBottom_toBottomOf="@+id/select_photo_button_register"
         app:layout_constraintEnd_toEndOf="@+id/select_photo_button_register"
         app:layout_constraintHorizontal_bias="1.0"
