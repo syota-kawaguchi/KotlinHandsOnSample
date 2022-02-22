@@ -8,20 +8,21 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import com.example.android_handson_chatapp.databinding.ActivityMainBinding
+import com.example.android_handson_chatapp.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityRegisterBinding
     private val tag = "RegisterActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
 
         val view = binding.root
 
@@ -113,8 +114,24 @@ class RegisterActivity : AppCompatActivity() {
 
                 ref.downloadUrl.addOnSuccessListener {
                     Log.d(tag, "File Location :$it")
+
+                    saveUserToFirebaseDatabase(it.toString())
                 }
             }
             .addOnFailureListener {}
     }
+
+    private fun saveUserToFirebaseDatabase(profileImageUrl: String) {
+        val uid = FirebaseAuth.getInstance().uid ?: ""
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+
+        val user = User(uid, binding.usernameEdittextRegister.text.toString(), profileImageUrl)
+
+        ref.setValue(user)
+            .addOnSuccessListener {
+                Log.d(tag, "Finally we saved the user to Firebase Database")
+            }
+    }
 }
+
+class User(val uid: String, val username: String, val profileImageUrl: String)
