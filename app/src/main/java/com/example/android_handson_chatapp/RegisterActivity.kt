@@ -88,29 +88,33 @@ class RegisterActivity : AppCompatActivity() {
                 Log.d(tag, "Successfully created user with uid: ${it.result.user?.uid}")
 
                 //Firebaseに登録する処理
-                if (selectPhotoUri == null){
-                    Toast.makeText(this, "please choose Image", Toast.LENGTH_SHORT).show()
-                    return@addOnCompleteListener
-                }
-
-                //要調査
-                val filename = UUID.randomUUID().toString()
-                val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
-
-                ref.putFile(selectPhotoUri!!)
-                    .addOnSuccessListener {
-                        Log.d(tag, "Successfuly uploaded image:${it.metadata?.path}")
-
-                        ref.downloadUrl.addOnSuccessListener {
-                            Log.d(tag, "File Location :$it")
-                        }
-                    }
-                    .addOnFailureListener {}
+                uploadImageToFirebaseStorage()
             }
             .addOnFailureListener{
                 //emailのformatが違ったら実行
                 Log.d(tag, "failed to create user message ${it.message}")
                 Toast.makeText(this, "Failed to create user", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun uploadImageToFirebaseStorage() {
+        if (selectPhotoUri == null){
+            Toast.makeText(this, "please choose Image", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        //要調査
+        val filename = UUID.randomUUID().toString()
+        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+
+        ref.putFile(selectPhotoUri!!)
+            .addOnSuccessListener {
+                Log.d(tag, "Successfuly uploaded image:${it.metadata?.path}")
+
+                ref.downloadUrl.addOnSuccessListener {
+                    Log.d(tag, "File Location :$it")
+                }
+            }
+            .addOnFailureListener {}
     }
 }
