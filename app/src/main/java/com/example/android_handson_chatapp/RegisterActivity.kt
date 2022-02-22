@@ -2,6 +2,7 @@ package com.example.android_handson_chatapp
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -9,6 +10,8 @@ import android.util.Log
 import android.widget.Toast
 import com.example.android_handson_chatapp.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -44,16 +47,18 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    var selectPhotoUri: Uri? = null
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
             Log.d(tag, "Photo was selected")
 
-            val uri = data.data
+            selectPhotoUri = data.data
 
             //APIレベルによってbitmapの取得方法の推奨が違う
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectPhotoUri)
             binding.circleViewRegister.setImageBitmap(bitmap)
             binding.selectPhotoButtonRegister.alpha = 0f
         }
@@ -81,6 +86,26 @@ class RegisterActivity : AppCompatActivity() {
 
                 //else if successful
                 Log.d(tag, "Successfully created user with uid: ${it.result.user?.uid}")
+
+                //Firebaseに登録する処理
+                if (selectPhotoUri == null){
+                    Toast.makeText(this, "please choose Image", Toast.LENGTH_SHORT).show()
+                    return@addOnCompleteListener
+                }
+
+                //要調査
+                val filename = UUID.randomUUID().toString()
+                val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+
+                ref.putFile(selectPhotoUri!!)
+                    .addOnSuccessListener {
+                        Log.d(tag, "Successfuly uploaded image:${it.metadata?.path}")
+
+                        ref.downloadUrl.addOnSuccessListener {
+                            Log.d(tag, "File Location :$it")
+                        }
+                    }
+                    .addOnFailureListener {}
             }
             .addOnFailureListener{
                 //emailのformatが違ったら実行
