@@ -1,37 +1,44 @@
 package com.example.android_handson_chatapp
 
-import android.content.Context
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.parcel.Parcelize
 
-class LatestMessageAdaptor(context: Context, var UserList: List<User>): ArrayAdapter<User>(context, 0, UserList) {
-    private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private val listener: ListListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val user: User = UserList[position]
-
-        var view = convertView
-        if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.latest_message_row, parent, false)
-        }
-
-        val userImage = view?.findViewById<ImageView>(R.id.image_imageview_latestmessage)
-        //picasso
-
-        val username = view?.findViewById<TextView>(R.id.username_textview_latestmessage)
-        username?.text = user.username
-
-        val message = view?.findViewById<TextView>(R.id.message_textview_latestmessage)
-        message?.text = ""
-
-        return view!!
+    interface ListListener {
+        fun onClickItem(tappedView: View, latestMessageItem: LatestMessageItem)
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.latest_message_row, parent, false)
+        return LatestMessageViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        holder.itemView.findViewById<TextView>(R.id.message_textview_latestmessage).text = ""
+        holder.itemView.findViewById<TextView>(R.id.username_textview_latestmessage).text = items[position].username
+        holder.itemView.setOnClickListener {
+            listener.onClickItem(it, items[position])
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+}
+
+class LatestMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val username: TextView = itemView.findViewById(R.id.username_textview_latestmessage)
+    val userImage: ImageView = itemView.findViewById(R.id.image_imageview_latestmessage)
+    val message: TextView = itemView.findViewById(R.id.message_textview_latestmessage)
+}
+
+class LatestMessageItem(val username: String, val message: String, val profileImageUrl: String) {
+    constructor() : this("", "", "")
 }
 
 @Parcelize
