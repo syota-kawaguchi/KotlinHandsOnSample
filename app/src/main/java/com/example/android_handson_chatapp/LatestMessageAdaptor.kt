@@ -21,8 +21,9 @@ class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private v
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.itemView.findViewById<TextView>(R.id.message_textview_latestmessage).text = ""
+        holder.itemView.findViewById<TextView>(R.id.message_textview_latestmessage).text = items[position].message
         holder.itemView.findViewById<TextView>(R.id.username_textview_latestmessage).text = items[position].username
+        holder.itemView.findViewById<ImageView>(R.id.image_imageview_latestmessage)
         holder.itemView.setOnClickListener {
             listener.onClickItem(it, items[position])
         }

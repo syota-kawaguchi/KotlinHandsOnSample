@@ -70,7 +70,7 @@ class LatestMessageActivity : AppCompatActivity() {
                     Log.d(TAG, "snapshot children : ${it.toString()}")
                     val user = it.getValue(User::class.java)
                     if (user != null) {
-                        items.add(LatestMessageItem(user.username, "", user.profileImageUrl))
+                        items.add(LatestMessageItem(user.username, "hello world", user.profileImageUrl))
                     }
                 }
 
