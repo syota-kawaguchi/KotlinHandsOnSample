@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Android_HandsOn_ChatApp">
         <activity
+            android:name=".ChatLogActivity"
+            android:exported="false" />
+        <activity
             android:name=".LatestMessageActivity"
             android:exported="true">
             <intent-filter>

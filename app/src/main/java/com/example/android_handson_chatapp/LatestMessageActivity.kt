@@ -80,7 +80,11 @@ class LatestMessageActivity : AppCompatActivity() {
                     adapter = LatestMessageAdaptor(
                         items,
                         object : LatestMessageAdaptor.ListListener {
-                            override fun onClickItem(tappedView: View, latestMessageItem: LatestMessageItem) {}
+                            override fun onClickItem(tappedView: View, latestMessageItem: LatestMessageItem) {
+                                val intent = Intent(tappedView.context, ChatLogActivity::class.java)
+
+                                startActivity(intent)
+                            }
                         }
                     )
                 }
