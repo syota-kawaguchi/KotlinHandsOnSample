@@ -9,22 +9,22 @@
         android:id="@+id/textview_chat_log_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/chatlog_from_background"
         android:maxWidth="240dp"
         android:padding="16dp"
         android:text="This is my message that will wrap into multiple lines and keep on going"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/imageView_chat_log_row"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_chat_log_row"
         app:layout_constraintTop_toTopOf="@+id/imageView_chat_log_row" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView_chat_log_row"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
 

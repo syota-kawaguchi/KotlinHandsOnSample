@@ -3,7 +3,7 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="10dp"/>
-            <solid android:color="@color/chat_log_background"/>
+            <solid android:color="@color/iOS_blue"/>
         </shape>
     </item>
 </selector>
