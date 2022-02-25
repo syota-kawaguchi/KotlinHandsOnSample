@@ -25,6 +25,8 @@ class ChatLogActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityChatLogBinding
 
+    var toUser: User? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,12 +36,10 @@ class ChatLogActivity : AppCompatActivity() {
 
         setContentView(view)
 
-        val user = intent.getParcelableExtra<User>(LatestMessageActivity.USER_KEY)
-        supportActionBar?.title = user?.username
+        toUser = intent.getParcelableExtra<User>(LatestMessageActivity.USER_KEY)
+        supportActionBar?.title =toUser?.username
 
         recyclerView = binding.recyclerviewChatLog
-
-//        SetupDummyData()
 
         listenfForMessage()
 
@@ -56,9 +56,13 @@ class ChatLogActivity : AppCompatActivity() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatMessage::class.java)
                 val myId = FirebaseAuth.getInstance().uid
+                val user = if (chatMessage?.fromId == myId) LatestMessageActivity.currentuser else toUser
+
+                if (user == null) return
+
                 if (chatMessage != null) {
                     Log.d(TAG, chatMessage.text)
-                    chatLogs.add(ChatLogItem("username", chatMessage.text, "",  chatMessage.fromId == myId))
+                    chatLogs.add(ChatLogItem(user.username, chatMessage.text, user.profileImageUrl,  chatMessage.fromId == myId))
                 }
                 refreshAdaptor()
             }

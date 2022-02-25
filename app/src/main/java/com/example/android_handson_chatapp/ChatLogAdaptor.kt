@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class ChatLogAdaptor(
     private val list: List<ChatLogItem>,
@@ -32,6 +33,9 @@ class ChatLogAdaptor(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.findViewById<TextView>(R.id.textview_chat_log_row).text = list[position].message
+        val url = list[position].profileImageUrl
+        val targetImageView =holder.itemView.findViewById<ImageView>(R.id.imageView_chat_log_row)
+        Picasso.get().load(url).into(targetImageView)
         holder.itemView.setOnClickListener {
             listener.onClickItem(it, list[position])
         }

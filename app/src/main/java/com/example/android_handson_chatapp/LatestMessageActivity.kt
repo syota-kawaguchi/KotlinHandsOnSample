@@ -59,6 +59,21 @@ class LatestMessageActivity : AppCompatActivity() {
     }
 
     private fun fetchCurrentUser() {
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("users/$uid")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                currentuser = snapshot.getValue(User::class.java)
+                Log.d(TAG, "Current user ${currentuser?.profileImageUrl}")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
+
+    private fun listenForLatestMessages() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/")
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -97,8 +112,6 @@ class LatestMessageActivity : AppCompatActivity() {
             }
         })
     }
-
-    private fun listenForLatestMessages() {}
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item?.itemId == R.id.menu_sign_out){
