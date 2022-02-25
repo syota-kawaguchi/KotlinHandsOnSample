@@ -21,6 +21,7 @@ class LatestMessageActivity : AppCompatActivity() {
 
     companion object {
         var currentuser: User? = null
+        val USER_KEY = "USER_KEY"
         val TAG = "LatestMessagesActivity"
         var recyclerView: RecyclerView? =null
     }
@@ -70,7 +71,7 @@ class LatestMessageActivity : AppCompatActivity() {
                     Log.d(TAG, "snapshot children : ${it.toString()}")
                     val user = it.getValue(User::class.java)
                     if (user != null) {
-                        items.add(LatestMessageItem(user.username, "hello world", user.profileImageUrl))
+                        items.add(LatestMessageItem(user, "hello world"))
                     }
                 }
 
@@ -82,7 +83,7 @@ class LatestMessageActivity : AppCompatActivity() {
                         object : LatestMessageAdaptor.ListListener {
                             override fun onClickItem(tappedView: View, latestMessageItem: LatestMessageItem) {
                                 val intent = Intent(tappedView.context, ChatLogActivity::class.java)
-
+                                intent.putExtra(USER_KEY, latestMessageItem.user)
                                 startActivity(intent)
                             }
                         }

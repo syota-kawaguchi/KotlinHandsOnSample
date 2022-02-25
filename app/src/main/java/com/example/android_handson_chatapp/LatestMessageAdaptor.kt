@@ -1,13 +1,11 @@
 package com.example.android_handson_chatapp
 
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.parcel.Parcelize
 
 class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private val listener: ListListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -22,7 +20,7 @@ class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private v
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.findViewById<TextView>(R.id.message_textview_latestmessage).text = items[position].message
-        holder.itemView.findViewById<TextView>(R.id.username_textview_latestmessage).text = items[position].username
+        holder.itemView.findViewById<TextView>(R.id.username_textview_latestmessage).text = items[position].user.username
         holder.itemView.findViewById<ImageView>(R.id.image_imageview_latestmessage)
         holder.itemView.setOnClickListener {
             listener.onClickItem(it, items[position])
