@@ -38,11 +38,6 @@ class LatestMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     val message: TextView = itemView.findViewById(R.id.message_textview_latestmessage)
 }
 
-class LatestMessageItem(val username: String, val message: String, val profileImageUrl: String) {
-    constructor() : this("", "", "")
-}
-
-@Parcelize
-class User(val uid: String, val username: String, val profileImageUrl: String): Parcelable {
-    constructor() : this("", "", "")
+class LatestMessageItem(val user: User, val message: String) {
+    constructor() : this(User(), "")
 }
