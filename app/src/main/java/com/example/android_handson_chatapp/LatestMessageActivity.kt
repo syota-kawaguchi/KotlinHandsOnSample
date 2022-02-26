@@ -10,12 +10,8 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_handson_chatapp.databinding.ActivityLatestMessageBinding
-import com.example.android_handson_chatapp.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 class LatestMessageActivity : AppCompatActivity() {
 
@@ -74,6 +70,7 @@ class LatestMessageActivity : AppCompatActivity() {
     }
 
     private fun listenForLatestMessages() {
+        val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/")
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -86,7 +83,24 @@ class LatestMessageActivity : AppCompatActivity() {
                     Log.d(TAG, "snapshot children : ${it.toString()}")
                     val user = it.getValue(User::class.java)
                     if (user != null) {
-                        items.add(LatestMessageItem(user, "hello world"))
+                        val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/${user.uid}")
+                        ref.get().addOnSuccessListener {
+                            Log.d(TAG, "success load latest message : ${it.key}")
+                            val chatMessage = it.getValue(ChatMessage::class.java)
+                            if (chatMessage == null) {
+                                Log.d(TAG, "Latest Message is blank : ${chatMessage}")
+                                items.add(LatestMessageItem(user, ""))
+                            }
+                            else {
+                                Log.d(TAG, "chatMessage is : ${chatMessage.text}")
+                                items.add(LatestMessageItem(user, chatMessage.text))
+                            }
+                        }
+                        .addOnFailureListener {
+                            Log.d(TAG, "failed to load latest message : ${it.message}")
+                        }
+
+                        items.add(LatestMessageItem(user, ""))
                     }
                 }
 

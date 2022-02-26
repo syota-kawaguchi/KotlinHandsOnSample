@@ -111,6 +111,12 @@ class ChatLogActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${ref.key}")
             }
+
+        val latestmessageRef = FirebaseDatabase.getInstance().getReference("latest-messages/$fromId/$toId")
+        latestmessageRef.setValue(chatMessage)
+
+        val latestmessageToRef = FirebaseDatabase.getInstance().getReference("latest-messages/$toId/$fromId")
+        latestmessageToRef.setValue(chatMessage)
     }
 
     private fun SetupDummyData() {
