@@ -35,6 +35,9 @@ class LatestMessageActivity : AppCompatActivity() {
 
         recyclerView = binding.RecyclerViewLatestMessage
 
+        val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
+        recyclerView?.addItemDecoration(dividerItemDecoration)
+
         //ログインされているかの判定
         verifyUserIsLoggedIn()
 
