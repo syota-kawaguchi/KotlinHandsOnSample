@@ -65,7 +65,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    //method抽出はどんなときにする？
     private fun performRegister() {
         val email = binding.emailEdittextRegister.text.toString();
         val password = binding.passwordEdittextRegister.text.toString();

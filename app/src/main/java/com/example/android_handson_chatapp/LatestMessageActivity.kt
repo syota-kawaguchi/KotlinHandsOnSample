@@ -15,9 +15,6 @@ import com.example.android_handson_chatapp.databinding.ActivityLatestMessageBind
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -34,14 +31,17 @@ suspend fun DatabaseReference.awaitGet(): DataSnapshot {
     }
 }
 
+const val USER_KEY = "USER_KEY"
+
 class LatestMessageActivity : AppCompatActivity() {
 
     companion object {
         var currentuser: User? = null
-        val USER_KEY = "USER_KEY"
-        val TAG = "LatestMessagesActivity"
-        var recyclerView: RecyclerView? = null
     }
+
+    val TAG = "LatestMessagesActivity"
+
+    var recyclerView: RecyclerView? = null
 
     private lateinit var binding: ActivityLatestMessageBinding
 
@@ -113,28 +113,6 @@ class LatestMessageActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun fetchLatestMessage(fromId: String, toId: String): String {
-        val task = GlobalScope.async(Dispatchers.IO) {
-            val ref =
-                FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/${toId}")
-            ref.get().addOnSuccessListener {
-                if (it.exists()) {
-                    it.getValue(LatestMessageItem::class.java)
-                } else {
-                    ""
-                }
-            }
-                .addOnFailureListener {
-                    ""
-                }
-        }
-        return withContext(Dispatchers.Main) {
-            val message = task.await()
-            Log.d(TAG, "latest message : ${message}")
-            return@withContext message.result.toString()
-        }
-    }
-
     private fun refreshRecycleView(items: List<LatestMessageItem>) {
         recyclerView?.apply {
             setHasFixedSize(true)
@@ -156,7 +134,7 @@ class LatestMessageActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item?.itemId == R.id.menu_sign_out) {
+        if (item.itemId == R.id.menu_sign_out) {
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, RegisterActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)

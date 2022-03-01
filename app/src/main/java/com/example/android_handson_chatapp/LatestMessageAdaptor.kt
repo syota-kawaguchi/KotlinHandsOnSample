@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android_handson_chatapp.databinding.LatestMessageRowBinding
 import com.squareup.picasso.Picasso
 
 class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private val listener: ListListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -15,8 +16,8 @@ class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private v
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.latest_message_row, parent, false)
-        return LatestMessageViewHolder(itemView)
+        val itemBinding = LatestMessageRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LatestMessageViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -32,10 +33,10 @@ class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private v
     override fun getItemCount(): Int = items.size
 }
 
-class LatestMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val username: TextView = itemView.findViewById(R.id.username_textview_latestmessage)
-    val userImage: ImageView = itemView.findViewById(R.id.image_imageview_latestmessage)
-    val message: TextView = itemView.findViewById(R.id.message_textview_latestmessage)
+class LatestMessageViewHolder(itemBinding: LatestMessageRowBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    val username: TextView = itemBinding.usernameTextviewLatestmessage
+    val userImage: ImageView = itemBinding.imageImageviewLatestmessage
+    val message: TextView = itemBinding.messageTextviewLatestmessage
 }
 
 class LatestMessageItem(val user: User, val message: String) {
