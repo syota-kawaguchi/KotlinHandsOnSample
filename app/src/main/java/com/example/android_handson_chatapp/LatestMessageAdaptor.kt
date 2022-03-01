@@ -9,34 +9,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_handson_chatapp.databinding.LatestMessageRowBinding
 import com.squareup.picasso.Picasso
 
-class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private val listener: ListListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LatestMessageAdaptor(private val items: List<LatestMessageItem>, private val listener: ListListener): RecyclerView.Adapter<LatestMessageViewHolder>() {
 
     interface ListListener {
         fun onClickItem(tappedView: View, latestMessageItem: LatestMessageItem)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestMessageViewHolder {
         val itemBinding = LatestMessageRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LatestMessageViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.itemView.findViewById<TextView>(R.id.message_textview_latestmessage).text = items[position].message
-        holder.itemView.findViewById<TextView>(R.id.username_textview_latestmessage).text = items[position].user.username
-        val userImage = holder.itemView.findViewById<ImageView>(R.id.image_imageview_latestmessage)
-        Picasso.get().load(items[position].user.profileImageUrl).into(userImage)
-        holder.itemView.setOnClickListener {
-            listener.onClickItem(it, items[position])
-        }
+    override fun onBindViewHolder(holder: LatestMessageViewHolder, position: Int) {
+        holder.bind(items[position], listener)
     }
 
     override fun getItemCount(): Int = items.size
 }
 
-class LatestMessageViewHolder(itemBinding: LatestMessageRowBinding) : RecyclerView.ViewHolder(itemBinding.root) {
-    val username: TextView = itemBinding.usernameTextviewLatestmessage
-    val userImage: ImageView = itemBinding.imageImageviewLatestmessage
-    val message: TextView = itemBinding.messageTextviewLatestmessage
+class LatestMessageViewHolder(private val itemBinding: LatestMessageRowBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    fun bind(item: LatestMessageItem, listener: LatestMessageAdaptor.ListListener){
+        itemBinding.usernameTextviewLatestmessage.text = item.message
+        itemBinding.messageTextviewLatestmessage.text = item.user.username
+        val userImage = itemBinding.imageImageviewLatestmessage
+        Picasso.get().load(item.user.profileImageUrl).into(userImage)
+        itemBinding.root.setOnClickListener {
+            listener.onClickItem(it, item)
+        }
+    }
 }
 
 class LatestMessageItem(val user: User, val message: String) {
